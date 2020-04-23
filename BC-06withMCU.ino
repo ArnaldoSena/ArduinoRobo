@@ -34,22 +34,26 @@ void loop(){
     }
     if(dadoBluetooth == '3'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
       Serial.println("#"); //IMPRIME O TEXTO NA SERIAL
+      //stop  comando(0,0,0,0)
     }
     if(dadoBluetooth == '4'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
       Serial.println("^"); //IMPRIME O TEXTO NA SERIAL
     }
     if(dadoBluetooth == 'u'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
       Serial.println("Para cima"); //IMPRIME O TEXTO NA SERIAL
-      //digitalWrite(pinoLed, HIGH); //LIGA O LED
+      //forw  comando(180,0,180,0)
     }
     if(dadoBluetooth == 'd'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
       Serial.println("Para baixo"); //IMPRIME O TEXTO NA SERIAL
+      //back  comando(0,180,0,180)
     }
     if(dadoBluetooth == 'l'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
       Serial.println("Para esquerda"); //IMPRIME O TEXTO NA SERIAL
+        //left  comando(0,180,180,0)
     }
     if(dadoBluetooth == 'r'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
       Serial.println("Para direita"); //IMPRIME O TEXTO NA SERIAL
+      //right comando(180,0,0,180)
     }
     if(dadoBluetooth == 'M'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
       Serial.println("Function one"); //IMPRIME O TEXTO NA SERIAL
@@ -78,6 +82,7 @@ void loop(){
   //back  comando(0,180,0,180)
   //forw  comando(180,0,180,0)
   //stop  comando(0,0,0,0)
+  
   void comando(int p1, int p2, int p3, int p4) {
     analogWrite(motorPin1, p1);
     analogWrite(motorPin2, p2);
