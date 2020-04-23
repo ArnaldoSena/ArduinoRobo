@@ -73,5 +73,18 @@ void loop(){
     
   }
 
+  //left  comando(0,180,180,0)
+  //right comando(180,0,0,180)
+  //back  comando(0,180,0,180)
+  //forw  comando(180,0,180,0)
+  //stop  comando(0,0,0,0)
+  void comando(int p1, int p2, int p3, int p4) {
+    analogWrite(motorPin1, p1);
+    analogWrite(motorPin2, p2);
+    analogWrite(motorPin3, p3);
+    analogWrite(motorPin4, p4);
+    delay(300);
+    moveForward();
+} 
   
 }
