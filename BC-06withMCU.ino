@@ -2,10 +2,14 @@
  
 const int pinoRX = 2; //PINO DIGITAL 2 (RX)
 const int pinoTX = 3; //PINO DIGITAL 3 (TX)
-const int pinoLed = 12; //PINO DIGITAL UTILIZADO PELO LED
 int dadoBluetooth = 0; //VARIÁVEL QUE ARMAZENA O VALOR ENVIADO PELO BLUETOOTH
 boolean loopLED = false; //VARIÁVEL BOOLEANA QUE FAZ O CONTROLE DE ATIVAÇÃO DO LOOP DO LED
- 
+//Motor A
+const int motorPin1 = 11;
+const int motorPin2 = 10;
+//Motor B
+const int motorPin3 = 6;
+const int motorPin4 = 5; 
 SoftwareSerial bluetooth(pinoRX, pinoTX); //PINOS QUE EMULAM A SERIAL, ONDE
 //O PINO 2 É O RX E O PINO 3 É O TX
  
@@ -16,80 +20,64 @@ void setup(){
   bluetooth.print("$"); //IMPRIME O CARACTERE
   bluetooth.print("$"); //IMPRIME O CARACTERE
   delay(100); //INTERVALO DE 100 MILISSEGUNDOS
-  pinMode(pinoLed, OUTPUT); //DEFINE O PINO COMO SAÍDA
-  pinMode(LED_BUILTIN, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
+  comando(0,0,0,0);
   Serial.println("Pronto!");
 }
- 
-void loop(){
-  if(bluetooth.available()){ //SE O BLUETOOTH ESTIVER HABILITADO, FAZ
-       dadoBluetooth = bluetooth.read(); //VARIÁVEL RECEBE O VALOR ENVIADO PELO BLUETOOTH
- 
-    if(dadoBluetooth == '1'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
-      Serial.println("X"); //IMPRIME O TEXTO NA SERIAL
-      //digitalWrite(pinoLed, HIGH); //LIGA O LED
-    }
-    if(dadoBluetooth == '2'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
-      Serial.println("O"); //IMPRIME O TEXTO NA SERIAL
-    }
-    if(dadoBluetooth == '3'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
-      Serial.println("#"); //IMPRIME O TEXTO NA SERIAL
-      //stop  comando(0,0,0,0)
-    }
-    if(dadoBluetooth == '4'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
-      Serial.println("^"); //IMPRIME O TEXTO NA SERIAL
-    }
-    if(dadoBluetooth == 'u'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
-      Serial.println("Para cima"); //IMPRIME O TEXTO NA SERIAL
-      //forw  comando(180,0,180,0)
-    }
-    if(dadoBluetooth == 'd'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
-      Serial.println("Para baixo"); //IMPRIME O TEXTO NA SERIAL
-      //back  comando(0,180,0,180)
-    }
-    if(dadoBluetooth == 'l'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
-      Serial.println("Para esquerda"); //IMPRIME O TEXTO NA SERIAL
-        //left  comando(0,180,180,0)
-    }
-    if(dadoBluetooth == 'r'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
-      Serial.println("Para direita"); //IMPRIME O TEXTO NA SERIAL
-      //right comando(180,0,0,180)
-    }
-    if(dadoBluetooth == 'M'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
-      Serial.println("Function one"); //IMPRIME O TEXTO NA SERIAL
-    }
-    if(dadoBluetooth == 'N'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
-      Serial.println("Function two"); //IMPRIME O TEXTO NA SERIAL
-    }
-    if(dadoBluetooth == 'm'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
-      Serial.println("Function one off"); //IMPRIME O TEXTO NA SERIAL
-    }
-    if(dadoBluetooth == 'n'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
-      Serial.println("Function two off"); //IMPRIME O TEXTO NA SERIAL
-    }
-
-    if(dadoBluetooth == 'o'){ //SE O VALOR RECEBIDO FOR IGUAL A 1, FAZ
-      Serial.println("solto oh"); //IMPRIME O TEXTO NA SERIAL
-    }
-    if(dadoBluetooth == '0'){ //SE O VALOR RECEBIDO FOR IGUAL A 0, FAZ
-      Serial.println("solto zero"); //IMPRIME O TEXTO NA SERIAL
-    }
-    
-  }
-
-  //left  comando(0,180,180,0)
-  //right comando(180,0,0,180)
-  //back  comando(0,180,0,180)
-  //forw  comando(180,0,180,0)
-  //stop  comando(0,0,0,0)
-  
-  void comando(int p1, int p2, int p3, int p4) {
+void comando(int p1, int p2, int p3, int p4) {
     analogWrite(motorPin1, p1);
     analogWrite(motorPin2, p2);
     analogWrite(motorPin3, p3);
     analogWrite(motorPin4, p4);
     delay(300);
-    moveForward();
+  }
+void loop(){
+  if(bluetooth.available()){
+       dadoBluetooth = bluetooth.read();
+ 
+    if(dadoBluetooth == '1'){
+      Serial.println("X");
+    }
+    if(dadoBluetooth == '2'){
+      Serial.println("O");
+    }
+    if(dadoBluetooth == '3'){
+      Serial.println("#");
+      comando(0,0,0,0);
+    }
+    if(dadoBluetooth == '4'){
+      Serial.println("^");
+    }
+    if(dadoBluetooth == 'u'){
+      comando(0,180,180,0);//F
+    }
+    if(dadoBluetooth == 'd'){
+      comando(180,0,0,180); //BK
+    }
+    if(dadoBluetooth == 'l'){
+      comando(0,180,0,180);//L
+    }
+    if(dadoBluetooth == 'r'){
+      comando(180,0,180,0);
+    }
+    if(dadoBluetooth == 'M'){
+      Serial.println("Function one");
+    }
+    if(dadoBluetooth == 'N'){
+      Serial.println("Function two");
+    }
+    if(dadoBluetooth == 'm'){
+      Serial.println("Function one off");
+    }
+    if(dadoBluetooth == 'n'){
+      Serial.println("Function two off");
+    }
+
+    if(dadoBluetooth == 'o'){
+      Serial.println("solto oh");
+    }
+    if(dadoBluetooth == '0'){
+      Serial.println("solto zero");
+    }
+    
+  }
 } 
-  
-}
