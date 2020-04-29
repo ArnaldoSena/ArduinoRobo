@@ -30,20 +30,59 @@ void comando(int p1, int p2, int p3, int p4) {
     analogWrite(motorPin4, p4);
     delay(300);
   }
+void loop(){
+  if(bluetooth.available()){
+       dadoBluetooth = bluetooth.read();
+      switch (dadoBluetooth) {
+        case 'u':
+          comando(0,180,180,0);
+        break;
+        case 'r':
+          comando(180,0,180,0);
+        break;
+        case 'l':
+          comando(0,180,0,180);
+        break;
+        case 'd':
+          comando(180,0,0,180);
+        break;
+        case '3':
+          comando(0,0,0,0);
+        break;
+        case '1':
+        //do something when var equals 2
+        break;
+        case '2':
+        //do something when var equals 2
+        break;
+        case '4':
+        //do something when var equals 2
+        break;
+        case 'M':
+        //do something when var equals 2
+        break;
+        case 'N':
+        //do something when var equals 2
+        break;
+        case 'm':
+        //do something when var equals 2
+        break;
+        case 'n':
+        //do something when var equals 2
+        break;
+        case 'o':
+        //do something when var equals 2
+        break;
+ //       case '0':
+        //do something when var equals 2
+//        break;
+      default:
+        // if nothing else matches, do the default
+        // default is optional
+        break;
+    } 
+  }
 /*
-  switch (var) {
-  case 1:
-    //do something when var equals 1
-    break;
-  case 2:
-    //do something when var equals 2
-    break;
-  default:
-    // if nothing else matches, do the default
-    // default is optional
-    break;
-}
- */
 void loop(){
   if(bluetooth.available()){
        dadoBluetooth = bluetooth.read();
@@ -94,4 +133,5 @@ void loop(){
     }
     
   }
+  */
 } 
