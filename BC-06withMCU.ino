@@ -5,69 +5,83 @@ const int pinoTX = 3; //PINO DIGITAL 3 (TX)
 int dadoBluetooth = 0; //VARIÁVEL QUE ARMAZENA O VALOR ENVIADO PELO BLUETOOTH
 boolean loopLED = false; //VARIÁVEL BOOLEANA QUE FAZ O CONTROLE DE ATIVAÇÃO DO LOOP DO LED
 //Motor A
+const int EN_A = 9;
 const int motorPin1 = 11;
 const int motorPin2 = 10;
 //Motor B
-const int motorPin3 = 6;
-const int motorPin4 = 5; 
+const int EN_B = 5;
+const int motorPin3 = 7;
+const int motorPin4 = 6; 
+//speed
+int motor_speed;
 SoftwareSerial bluetooth(pinoRX, pinoTX); //PINOS QUE EMULAM A SERIAL, ONDE
 //O PINO 2 É O RX E O PINO 3 É O TX
  
 void setup(){
-  Serial.begin(9600); //INICIALIZA A SERIAL
   bluetooth.begin(9600); //INICIALIZA A SERIAL DO BLUETOOTH
   bluetooth.print("$"); //IMPRIME O CARACTERE
   bluetooth.print("$"); //IMPRIME O CARACTERE
   bluetooth.print("$"); //IMPRIME O CARACTERE
   delay(100); //INTERVALO DE 100 MILISSEGUNDOS
-  comando(0,0,0,0);
-  Serial.println("Pronto!");
+  pinMode(EN_A,OUTPUT);
+  pinMode(motorPin1,OUTPUT);
+  pinMode(motorPin2,OUTPUT);
+  pinMode(EN_B,OUTPUT);
+  pinMode(motorPin3,OUTPUT);
+  pinMode(motorPin4,OUTPUT);
+  motor_speed = 60;
+  comando(LOW,LOW,LOW,LOW, motor_speed);
 }
-void comando(int p1, int p2, int p3, int p4) {
-    analogWrite(motorPin1, p1);
-    analogWrite(motorPin2, p2);
-    analogWrite(motorPin3, p3);
-    analogWrite(motorPin4, p4);
+void comando(int p1, int p2, int p3, int p4, int ms) {
+    digitalWrite(motorPin1, p1);
+    digitalWrite(motorPin2, p2);
+    digitalWrite(motorPin3, p3);
+    digitalWrite(motorPin4, p4);
+    analogWrite(EN_A, ms);
+    analogWrite(EN_B, ms);
     delay(300);
   }
 void loop(){
   if(bluetooth.available()){
-       dadoBluetooth = bluetooth.read();
+      dadoBluetooth = bluetooth.read();
+      if(motor_speed > 220) motor_speed = 220;
+      if(motor_speed < 60) motor_speed = 60;
       switch (dadoBluetooth) {
         case 'u':
-          comando(0,180,180,0);
+          comando(LOW,HIGH,HIGH,LOW, motor_speed);
         break;
         case 'r':
-          comando(180,0,180,0);
+          comando(HIGH,LOW,HIGH,LOW, motor_speed);
         break;
         case 'l':
-          comando(0,180,0,180);
+          comando(LOW,HIGH,LOW,HIGH, motor_speed);
         break;
         case 'd':
-          comando(180,0,0,180);
+          comando(HIGH,LOW,LOW,HIGH, motor_speed);          
         break;
-        case '3':
-          comando(0,0,0,0);
+        case '3'://#
+          comando(LOW,LOW,LOW,LOW, motor_speed);
+          motor_speed = 60; 
         break;
-        case '1':
+        case '1': //x
+          motor_speed = motor_speed + 20;
+        break;
+        case '2': //o
+          //do something when var equals 2
+        break;
+        case '4'://tri
+          motor_speed = motor_speed - 20;
+        break;
+        case 'M'://F1
         //do something when var equals 2
         break;
-        case '2':
+        case 'N'://f2
         //do something when var equals 2
         break;
-        case '4':
+        case 'm'://f1
         //do something when var equals 2
         break;
-        case 'M':
-        //do something when var equals 2
-        break;
-        case 'N':
-        //do something when var equals 2
-        break;
-        case 'm':
-        //do something when var equals 2
-        break;
-        case 'n':
+        case 'n'://f2
         //do something when var equals 2
         break;
         case 'o':
@@ -82,56 +96,5 @@ void loop(){
         break;
     } 
   }
-/*
-void loop(){
-  if(bluetooth.available()){
-       dadoBluetooth = bluetooth.read();
- 
-    if(dadoBluetooth == '1'){
-      Serial.println("X");
-    }
-    if(dadoBluetooth == '2'){
-      Serial.println("O");
-    }
-    if(dadoBluetooth == '3'){
-      Serial.println("#");
-      comando(0,0,0,0);
-    }
-    if(dadoBluetooth == '4'){
-      Serial.println("^");
-    }
-    if(dadoBluetooth == 'u'){
-      comando(0,180,180,0);//F
-    }
-    if(dadoBluetooth == 'd'){
-      comando(180,0,0,180); //BK
-    }
-    if(dadoBluetooth == 'l'){
-      comando(0,180,0,180);//L
-    }
-    if(dadoBluetooth == 'r'){
-      comando(180,0,180,0);
-    }
-    if(dadoBluetooth == 'M'){
-      Serial.println("Function one");
-    }
-    if(dadoBluetooth == 'N'){
-      Serial.println("Function two");
-    }
-    if(dadoBluetooth == 'm'){
-      Serial.println("Function one off");
-    }
-    if(dadoBluetooth == 'n'){
-      Serial.println("Function two off");
-    }
-
-    if(dadoBluetooth == 'o'){
-      Serial.println("solto oh");
-    }
-    if(dadoBluetooth == '0'){
-      Serial.println("solto zero");
-    }
-    
-  }
-  */
+  
 } 
